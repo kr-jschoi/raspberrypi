@@ -9,25 +9,25 @@ ISR(TIMER1_COMPA_vect) {
 /*[2]Data Link layer: send data(send:PB2->PD2)*/
 ISR(TIMER1_COMPB_vect) {
 	if (send_select == PREAMBLE_FLAG) { // send Preemble
-		if (read_bit(send_preamble, i) == 1) { PORTB |= (1 << PINB2); } // send preamble(PB2->PD2)
+		if (read_bit(send_preamble, i) == 1) { PORTB |= (1 << PINB2); } // send Preamble(PB2->PD2)
 		else { PORTB &= ~(1 << PINB2); }
 		i++;
 		if (i == (PREAMBLE_SIZE * 8)) { i = 0; send_select = CRC_FLAG; }
 	}
 	else if (send_select == CRC_FLAG) { // send CRC
-		if (read_bit(send_frame->crc32, i) == 1) { PORTB |= (1 << PINB2); } // send crc(PB2->PD2)
+		if (read_bit(send_frame->crc32, i) == 1) { PORTB |= (1 << PINB2); } // send CRC(PB2->PD2)
 		else { PORTB &= ~(1 << PINB2); }
 		i++;
 		if (i == (CRC_SIZE * 8)) { i = 0; send_select = SIZE_FLAG; }
 	}
 	else if (send_select == SIZE_FLAG) { // send SIZE
-		if (read_bit(send_frame->size, i) == 1) { PORTB |= (1 << PINB2); } // send size(PB2->PD2)
+		if (read_bit(send_frame->size, i) == 1) { PORTB |= (1 << PINB2); } // send SIZE(PB2->PD2)
 		else { PORTB &= ~(1 << PINB2); }
 		i++;
 		if (i == (SIZE_OF_SIZE * 8)) { i = 0; send_select = PAYLOAD_FLAG; }
 	}
 	else if (send_select == PAYLOAD_FLAG) { // send PAYLOAD
-		if (read_bit(send_frame->payload, i) == 1) { PORTB |= (1 << PINB2); } // send payload(PB2->PD2)
+		if (read_bit(send_frame->payload, i) == 1) { PORTB |= (1 << PINB2); } // send PAYLOAD(PB2->PD2)
 		else { PORTB &= ~(1 << PINB2); }
 		i++;
 		if (i == ((send_frame->size[0]) * 8)) { i = 0; send_select = SEND_COMPLETE; }
@@ -40,9 +40,9 @@ ISR(TIMER1_COMPB_vect) {
 /*[1]Physical layer: Clock signal(recieve:PB1->PD3)*/
 /*[2]Data Link layer: read data(receive:PD2<-PB2)*/
 ISR(PCINT2_vect) {
-	if (receive_select == PREAMBLE_FLAG) { // receive preamble
+	if (receive_select == PREAMBLE_FLAG) { // receive Preamble
 		if (j < (PREAMBLE_SIZE * 8)) {
-			if (PD2_VOL) { write_bit(received_preamble, j, 1); } // read data(PD2<-PB2)
+			if (PD2_VOL) { write_bit(received_preamble, j, 1); } // read Preamble(PD2<-PB2)
 			else { write_bit(received_preamble, j, 0); }
 			j++;
 		}
@@ -58,19 +58,19 @@ ISR(PCINT2_vect) {
 		}
 	}
 	else if (receive_select == CRC_FLAG) { // receive CRC
-		if (PD2_VOL) { write_bit(receive_frame->crc32, j, 1); } // read data(PD2<-PB2)
+		if (PD2_VOL) { write_bit(receive_frame->crc32, j, 1); } // read CRC(PD2<-PB2)
 		else { write_bit(receive_frame->crc32, j, 0); }
 		j++;
 		if (j == (CRC_SIZE * 8)) { j = 0; receive_select = SIZE_FLAG; }
 	}
 	else if (receive_select == SIZE_FLAG) { // receive SIZE
-		if (PD2_VOL) { write_bit(receive_frame->size, j, 1); } // read data(PD2<-PB2)
+		if (PD2_VOL) { write_bit(receive_frame->size, j, 1); } // read SIZE(PD2<-PB2)
 		else { write_bit(receive_frame->size, j, 0); }
 		j++;
 		if (j == (SIZE_OF_SIZE * 8)) { j = 0; receive_select = PAYLOAD_FLAG; }
 	}
 	else if (receive_select == PAYLOAD_FLAG) { // receive PAYLOAD
-		if (PD2_VOL) { write_bit(receive_frame->payload, j, 1); } // read data(PD2<-PB2)
+		if (PD2_VOL) { write_bit(receive_frame->payload, j, 1); } // read PAYLOAD(PD2<-PB2)
 		else { write_bit(receive_frame->payload, j, 0); }
 		j++;
 		if (j == ((receive_frame->size[0]) * 8)) { j = 0; receive_select = LAYER3; }
