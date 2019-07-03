@@ -1,6 +1,11 @@
 #pragma once
 #include "layer3.c"
 
+//! This is the function to get the input from User
+/*!
+   \param void
+   \return void
+*/
 void user_input() {
 	int k;
 	unsigned char temp;
@@ -8,6 +13,7 @@ void user_input() {
 	unsigned int ID=0, SIZE=0;
 
 	/* ID Input */
+	//! - First, get the Destination ID to send
 	uart_transmit('\r'); uart_transmit('\n'); uart_transmit('\n');
 	for (k = 0; k < 50; k++) uart_transmit('*');
 	uart_transmit('\r'); uart_transmit('\n');
@@ -30,6 +36,7 @@ void user_input() {
 	else if(k==3) {ID = ((_ID[0]-48)*100 + (_ID[1]-48)*10 + (_ID[2]-48));} // ID with three digit
 
 	/* Send message size*/
+	//! - Second, get the size of message to send
 	uart_transmit('\r'); uart_transmit('\n');
 	print("Enter size(bytes) of message(1~251): ", 37);
 	while (1) {
@@ -50,6 +57,7 @@ void user_input() {
 	else if(k==3) {SIZE = ((_SIZE[0]-48)*100 + (_SIZE[1]-48)*10 + (_SIZE[2]-48));} // Size with three digit
 
 	/* Send message input*/
+	//! - Third, get the send message(1 or 0) to send
 	uart_transmit('\r'); uart_transmit('\n');
 	print("Enter send message(1 or 0): ", 28);
 	uint8_t* message = (uint8_t*)malloc(SIZE * sizeof(uint8_t)); // Allocate Memory

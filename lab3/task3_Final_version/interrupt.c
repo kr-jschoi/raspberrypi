@@ -1,12 +1,12 @@
 #pragma once
 #include "interrupt.h"
 
-/*[1]Physical layer: Clock signal(send:PB1->PD3)*/
+//! This is the Interrupt Service Routin for Clock signal(send:PB1 -> PD3)
 ISR(TIMER1_COMPA_vect) {
 	PORTB ^= (1 << PB1); // Clock signal
 }
 
-/*[2]Data Link layer: send data(send:PB2->PD2)*/
+//! This is the Interrupt Service Routin for Data send(send:PB2 -> PD2)
 ISR(TIMER1_COMPB_vect) {
 	if (send_select == PREAMBLE_FLAG) { // send Preemble
 		if (read_bit(send_preamble, i) == 1) { PORTB |= (1 << PINB2); } // send Preamble(PB2->PD2)
@@ -37,8 +37,7 @@ ISR(TIMER1_COMPB_vect) {
 	}
 }
 
-/*[1]Physical layer: Clock signal(recieve:PB1->PD3)*/
-/*[2]Data Link layer: read data(receive:PD2<-PB2)*/
+//! This is the Interrupt Service Routin for Clock signal(recieve:PB1->PD3) and Data read(receive:PD2<-PB2)
 ISR(PCINT2_vect) {
 	if (receive_select == PREAMBLE_FLAG) { // receive Preamble
 		if (j < (PREAMBLE_SIZE * 8)) {

@@ -5,11 +5,11 @@
 #define TRUE 0
 #define FALSE 1
 
-#define PREAMBLE_SIZE 1 // 1 Byte
-#define CRC_SIZE 4 // 4 Byte
-#define SIZE_OF_SIZE 1 // 1 Byte
-#define PAYLOAD_SIZE 251 // Maximum: 251 Byte
-#define DATA_SIZE (PREAMBLE_SIZE+CRC_SIZE+SIZE_OF_SIZE+PAYLOAD_SIZE) // Preamble(1Byte) + CRC(4Byte) + SIZE(1Byte) + PAYLOAD_SIZE
+#define PREAMBLE_SIZE 1 //! 1 Byte
+#define CRC_SIZE 4 //! 4 Byte
+#define SIZE_OF_SIZE 1 //! 1 Byte
+#define PAYLOAD_SIZE 251 //! Maximum: 251 Byte
+#define DATA_SIZE (PREAMBLE_SIZE+CRC_SIZE+SIZE_OF_SIZE+PAYLOAD_SIZE) //! Preamble(1Byte) + CRC(4Byte) + SIZE(1Byte) + PAYLOAD_SIZE
 
 #define USER_INPUT 0
 #define PREAMBLE_FLAG 1
@@ -28,6 +28,7 @@ volatile int relay_flag = 0;
 uint8_t send_preamble[1] = { 0b01111110 };
 uint8_t received_preamble[1] = { 0 };
 
+//! make the structure of buffer frame
 typedef struct {
 	uint8_t crc32[CRC_SIZE];
 	uint8_t size[SIZE_OF_SIZE];

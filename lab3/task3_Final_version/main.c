@@ -1,23 +1,42 @@
 #include "interrupt.c"
 
-/*******************************************MAIN**********************************************/
+/*
+	Output: PB1(send clock), PB2(send data)
+	Input: PD2(receive data), PD3(receive clock)
+*/
+
+//! This is the main loop.
 int main(void){
-	io_port_setup(); // Output: PB1,PB2 / Input Port: PD2
+	// IO port setup
+	io_port_setup();
+
+	// Uart initialize
 	uart_init();
-	timer_setup(); // period: 10ms
-	pcint_setup(); // use PD3 PORT
+
+	// Timer setup
+	// period: 10ms
+	timer_setup();
+
+	// Pcint setup
+	// Use PD3 for Pin change interrupt
+	pcint_setup();
 	
+	// Make layer2
 	make_layer2();
-	sei(); // grobal interrupt enable
+
+	// Global interrupt enable
+	sei();
 	
+	// Main loop
 	while (1) {
+		// User input mode
 		if (send_select == USER_INPUT) {
 			send_select = IDLE;
 			user_input();
 		}
 
 	}
-	free(send_frame); // remove memory
-	free(receive_frame); // remove memory
+	// free dynamic memories
+	free(send_frame);
+	free(receive_frame);
 }
-/*********************************************************************************************/

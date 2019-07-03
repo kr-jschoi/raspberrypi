@@ -8,10 +8,11 @@ OBJECT_FILES=main.o
 
 run: clean all flash
 
-all: $(TARGET).hex
-
 clean:
 	rm -f *.o *.hex *.obj *.hex
+	rm -rf html latex
+
+all: $(TARGET).hex
 
 %.hex: %.obj
 	avr-objcopy -R .eeprom -O ihex $< $@
@@ -21,3 +22,6 @@ clean:
 
 flash: $(TARGET).hex
 	avrdude -p $(MCU) -c gpio -P $(PORT) -U flash:w:$(TARGET).hex
+
+docs: clean
+	doxygen doc

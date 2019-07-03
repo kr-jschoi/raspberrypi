@@ -1,11 +1,21 @@
 #pragma once
 #include "layer2.h"
 
+//! This is the function to make a layer 2
+/*!
+   \param void
+   \return void
+*/
 void make_layer2() {
 	send_frame = (frame*)malloc(sizeof(frame)); // Allocate memory
 	receive_frame = (frame*)malloc(sizeof(frame)); // Allocate memory
 }
 
+//! This is the function to print out the message from buffer
+/*!
+   \param void
+   \return void
+*/
 void send_message() {
 	int n;
 	
@@ -54,6 +64,11 @@ void send_message() {
 	send_select = USER_INPUT; // return to user input mode
 }
 
+//! This is the function to print out the received massage from buffer
+/*!
+   \param void
+   \return void
+*/
 void received_message() {
 	int n;
 	int crc_correctness = crc_check(); // CRC Check
@@ -106,11 +121,21 @@ void received_message() {
 	receive_select = PREAMBLE_FLAG; //enable to receive data mode
 }
 
+//! This is the function to check preamble "01111110"
+/*!
+   \param received_preamble: received preamble to check
+   \return True or False
+*/
 int preamble_check(uint8_t *received_preamble) {
 	if (send_preamble[0] == received_preamble[0]) return TRUE;
 		return FALSE;
 }
 
+//! This is the function to check CRC
+/*!
+   \param void
+   \return crc_correctness: 0(true), 0!(False)
+*/
 int crc_check() {
 	int p;
 	int crc_correctness = 0;
@@ -124,6 +149,12 @@ int crc_check() {
 	return crc_correctness;
 }
 
+//! This is the function to make CRC
+/*!
+   \param size: size of payload
+   \param payload: payload
+   \return crc32: return generated CRC32
+*/
 uint8_t* make_crc(uint8_t size, uint8_t * payload) {
 	int l = 0, m = 0;
 	static uint8_t crc32[CRC_SIZE] = { 0 };
@@ -151,6 +182,13 @@ uint8_t* make_crc(uint8_t size, uint8_t * payload) {
 	return crc32;
 }
 
+//! This is the function to make a send buffer
+/*! 
+   \param SIZE: SIZE of payload
+   \param ID: destination ID
+   \param *message: message that wants to send
+   \return void
+*/
 void make_send_frame(unsigned int SIZE, unsigned int ID, uint8_t *message) {
 	int k;
 	send_frame->size[0] = SIZE;
@@ -167,6 +205,11 @@ void make_send_frame(unsigned int SIZE, unsigned int ID, uint8_t *message) {
 	send_select = PREAMBLE_FLAG; // start to send message
 }
 
+//! This is the function to clear a buffer
+/*!
+   \param frame: the frame to clear
+   \return void
+*/
 void clear_frame(frame *_frame){
 	int k;
 	for(k=0; k<4; k++) _frame->crc32[k] = 0x00;

@@ -11,7 +11,7 @@
 
 #define ENTER 13
 
-//void make_layer3(frame *send_frame);
+void make_layer3(unsigned int ID, frame* send_frame);
 void ID_check(frame *send_frame, frame *receive_frame);
 bool source_check(uint8_t ID);
 void retransmit(frame * send_frame, frame * receive_frame);
